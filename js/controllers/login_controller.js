@@ -89,6 +89,9 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                                 navigator.vibrate(500);
                                 $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;   
                             }
+                            else{
+                                navigator.notification.alert(JSON.stringify($data));
+                            }
                          }
                }).error(function(err){
                    navigator.vibrate(1000);
