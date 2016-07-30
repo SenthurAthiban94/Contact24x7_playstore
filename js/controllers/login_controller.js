@@ -35,16 +35,18 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                     navigator.notification.alert($data.msg);
                     $scope.submittedsignup=false;
                     $scope.signuploading=false;
+                    navigator.vibrate(2000);
                     $scope.redirect();
                 }
                 else
                 {
+                    navigator.vibrate(2000);
                     navigator.notification.alert($data.msg);
                     $scope.signuploading=false;
                     $scope.submittedsignup=false;
                 }
                }).error(function(err){
-                   navigator.notification.alert("Error : " + err);
+                   navigator.vibrate(2000);
                    if((err=="") || (err=="undefined")){
                        navigator.notification.alert("Check your Internet Connection!!");
                    }
@@ -77,13 +79,16 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                         sessionStorage.userDataObJect=JSON.stringify($scope.userdata);
                         $scope.submitted=false;
                         $scope.loginloading=false;
+                        navigator.vibrate(2000);
                         $scope.redirect();
                     }
                     else{
-                           navigator.notification.alert(JSON.stringify($data));
-                            $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;$scope.submitted=false;
+                            //navigator.notification.alert($data.msg);
+                            navigator.vibrate(2000);
+                            $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;
                          }
                }).error(function(err){
+                   navigator.vibrate(2000);
                    navigator.notification.alert("Error : " + err);
                    if((err=="") || (err=="undefined")){
                        

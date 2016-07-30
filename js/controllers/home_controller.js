@@ -249,6 +249,7 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
     		    },
     			error : function(e){
                     //alert("entering getprofile error function");
+                    navigator.vibrate(2000);
                     navigator.notification.alert("Authentication Failed !! \nTry again Later");
                     $scope.loadingimage=false;
                     $scope.homemenu();
@@ -376,11 +377,13 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         $scope.operationperforming=true;
         if($scope.displaynames==$scope.devicecontactsnames)
         {
+              navigator.vibrate(2000);
               navigator.notification.alert("Performing Background Upload...");
               $scope.uploadallcontactstodatabase();
         }
         if($scope.displaynames==$scope.uploadedcontactsnames)
         {
+            navigator.vibrate(2000);
             navigator.notification.alert("Performing Background Delete...");
             $scope.deleteallcontactsfromdatabase();
         }
@@ -438,10 +441,12 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
                 $scope.loadingimage=false;
             }
             else{
+                navigator.vibrate(2000);
                 navigator.notification.alert("Contacts Retrival Failed!!");
                 $scope.loadingimage=false;
             }
         }).error(function(err){
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -454,12 +459,14 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         $scope.loadingimage=false;
         $http(database.uploadcontacts($scope.userdata.usermail,$scope.retrivedcontacts)).success(function($data){
             if(!$scope.googlecontacts){
+                navigator.vibrate(2000);
                navigator.notification.alert("Contacts Uploaded Successfully");   
             }
             $scope.loadingimage=false; 
             $scope.operationperforming=false;
         }).error(function(err){
             $scope.loadingimage=false;
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -471,10 +478,12 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         var uploadthiscontact=[];
         uploadthiscontact.push($contact);
         $http(database.uploadcontacts($scope.userdata.usermail,uploadthiscontact)).success(function($data){
+            navigator.vibrate(1000);
             navigator.notification.alert($data.msg);
             $scope.loadingimage=false;
         }).error(function(err){
             $scope.loadingimage=false;
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -486,9 +495,11 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
                 $scope.checkuploadedcontacts=$data.Contacts;
             }
             else{
+                navigator.vibrate(2000);
                 navigator.notification.alert("Contacts Retrival Failed!!");
             }
         }).error(function(err){
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -507,12 +518,14 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         $http(database.deletecontacts($scope.userdata.usermail,$scope.retrivedcontacts)).success(function($data){
             if($data.status==1)
             {
+                navigator.vibrate(2000);
                 navigator.notification.alert("All Contact Deleted Successfully"); 
             }
             $scope.operationperforming=false;
             $scope.loadingimage=false;
             $scope.refreshcontacts();
         }).error(function(err){
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -526,6 +539,7 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         $http(database.deletecontacts($scope.userdata.usermail,deletethiscontact)).success(function($data){
             if($data.status==1)
             {
+                navigator.vibrate(1000);
                 navigator.notification.alert("Contact Deleted Successfully");
                 $scope.remove($contact);
                 $scope.loadingimage=false;
@@ -535,6 +549,7 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
             }
         }).error(function(err){
             $scope.loadingimage=false;
+            navigator.vibrate(2000);
             if(err==""){
                  navigator.notification.alert("Check your Internet Connection!!");
             }else{navigator.notification.alert(JSON.stringify(err));}
@@ -560,6 +575,7 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
                         $scope.loadingimage=true;
                     }
                }).error(function(err){
+                   navigator.vibrate(2000);
                    if(err==""){
                          navigator.notification.alert("Check your Internet Connection!!");
                     }else{navigator.notification.alert(JSON.stringify(err));}
