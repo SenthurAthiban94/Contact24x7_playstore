@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src * 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1,height=device-height, target-densitydpi=medium-dpi,width=device-width">
+        <title>Contact Backup</title>
+        <link rel="stylesheet" href="lib/css/slidebars.css">
+        <link rel="stylesheet" href="lib/css/style.css">
+        <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="lib/css/jansy-bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/index.css"></link>
+        <script type="text/javascript" src="lib/js/angular.min.js"></script>
+        <script type="text/javascript" src="./lib/js/googleclient.js"></script>
+        <script type="text/javascript" src="lib/js/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/js/jasny-bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/controllers/home_controller.js"></script>
+        <script type="text/javascript" src="js/services/api_controller.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </head>
+    
+    <body ng-controller="home_controller" ng-init="displaynames=devicecontactsnames;refreshcontacts();">
+        <nav id="Menus" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation" style="width:70%;background-color:#1B2A4B;"
+        ng-init="selecteditem1='active';">
+            <img src="img/logo.png" height="50px" width="100%;"></img>
+            <ul class="nav nav-pills nav-stacked" id="menulist">
+                <li class="{{selecteditem1}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);menuonecount=menuonecount+1;checkfirstselected(menuonecount);"><b>Device Contacts</b></a>
+                </li>
+                <li class="{{selecteditem2}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=uploadedcontactsnames;googlecontactmenu=false;tablemargin=125;item=2;selectmenuitem(item);menutwocount=menutwocount+1;checksecondselected(menutwocount);"><b>Uploaded Contacts</b></a>
+                </li>
+                <li class="{{selecteditem3}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=Googlecontactsnames;googlecontactmenu=true;tablemargin=122;item=3;selectmenuitem(item);checkthirdselected();"><b>Google Contacts</b></a>
+                </li>
+                <li class="{{selecteditem4}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);logoutsession();disconnectUser();" ng-dblclick="false"><b>Logout</b></a>
+                </li>
+            </ul>
+        </nav>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div style="padding:0px;padding-left:10px;">
+                <button type="button" class="navbar-toggle pull-left" style="margin-right:0px;" data-toggle="offcanvas" data-target="#Menus"
+                data-canvas="body">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div style="padding-top:10px;padding-bottom:10px;padding-right:5px;">
+                    <span style="color:white;font-size:20px;padding-left:5px;" ng-bind="displaynames.title">Device Contacts</span>
+                    <button ng-if="!googlecontactmenu" type="button" ng-bind="displaynames.selectall" class="btn btn-primary btn-sm pull-right"
+                    ng-click="actiontobeperformedonallcontacts();" ng-disabled="checkbackgroundopertion(operationperforming,retrivedcontacts.length)" ng-cloak>Upload All</button>
+                    <input ng-if="googlecontactmenu && gotgooglecontacts.Contacts" type="button" class="btn btn-sm pull-right btn-success" style="padding-left:4px;padding-right:4px;" ng-click="switchaccount();" value="Switch Account" ng-cloak></input>
+                </div>
+            </div>
+        </div>
+        <div style="padding:0px;">
+            <table class="table table-hover" id="headertable">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 col-xs-1 col-md-1" style="padding-left:5px;padding-right:5px;">
+                            <strong>No.</strong>
+                        </th>
+                        <th class="col-sm-10 col-xs-10 col-md-10" style="text-align:center;">
+                            <span style="font-size:14px;" ng-if="displaynames==Googlecontactsnames" ng-bind="gotgooglecontacts.title"></span>
+                            <strong ng-if="(displaynames!=Googlecontactsnames) || (!gotgooglecontacts.title)">Contacts</strong>
+                        </th>
+                        <th class="col-sm-1 col-xs-1 col-md-1" style="padding-top:4px;padding-bottom:4px;padding-right:5px;">
+                            <button ng-if="!googlecontactmenu" type="button" ng-click="loadingimage=true;refreshcontacts();searchtext='';" class="btn btn-sm btn-success"
+                            style="height:35px;padding-left:7px;padding-right:7px;">
+                                <b>
+                                    <span ng-bind="displaynames.refresh">Refresh</span>
+                                </b>
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="padding:0px;width:0px;"></th>
+                        <th class="col-sm-12 col-xs-12 col-md-12" style="padding:0px;">
+                            <input type="text" style="width:100%;font-size:15px;font-family:Lucida Sans;padding:2px;" ng-model="searchtext" ng-disabled="loadingimage"
+                            placeholder="Search for Contacts here..."></input>
+                        </th>
+                        <th style="width:0px;padding:0px;"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="tablebody" ng-init="name='Name :';number='Number :';" style="margin-top:{{tablemargin}}px;">
+            <div id="loaderbackground">
+                <div id="loader">
+                    <img src="css/loading/loader.gif" height="100%" width="100%"></img>
+                    <br>
+                    <span style="background-color:white;opacity:1;">
+                        <b>Loading...</b>
+                    </span>
+                </div>
+            </div>
+            <div canvas="container" style="padding:0px;padding-bottom:105px;" id="tablecontents" ng-hide="loadingimage">
+                <table class="table table-hover" ng-cloak>
+                    <tbody id="result"> 
+                        <div class="alert alert-danger" ng-show="(!(retrivedcontacts | filter:searchtext).length) && (!loadingimage)" id="noresults" ng-cloak>No results found !!</div>
+                        <tr ng-repeat="contact in retrivedcontacts | filter:searchtext | orderBy: 'contactName'">
+                            <td class="col-sm-1 col-xs-1 col-md-1" ng-bind="$index+1"></td>
+                            <td class="col-sm-10 col-xs-10 col-md-10" style="font-size:16px;padding-left:8px;padding-right:5px;">
+                                <div>
+                                    <div>
+                                        <b>
+                                            <span ng-bind="name"></span>
+                                        </b>
+                                        <span style="padding-left:2px;" ng-bind="contact.contactName"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <b>
+                                            <span ng-bind="number"></span>
+                                        </b>
+                                        <span style="padding-left:2px;" ng-bind="contact.contactNo | removeSpaces"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-xs-1 col-md-1" style="padding-left:0px;padding-right:5px;padding-top:10px;padding-bottom:10px;">
+                                <button ng-if="!googlecontactmenu" type="button" ng-click="actiontobeperformedonthiscontact(contact);" ng-disabled="doesExist(contact);"
+                                class="btn btn-sm {{displaynames.style}}" style="height:35px;padding-top:2px;padding-bottom:2px;" ng-bind="displaynames.select">
+                                Upload
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<!--        <iframe ng-if="googlelogout" src="https://accounts.google.com/Logout" style="display:none;"></iframe>-->
+        <script src="js/slidebars.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+
+</html>
