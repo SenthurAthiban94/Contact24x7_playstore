@@ -68,7 +68,7 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
             $scope.submitted=true;
             if($scope.login_mail){
                 $scope.validateemail=false;
-                navigator.notification.alert(database.login($scope.login_mail,$scope.login_password));
+                //navigator.notification.alert(database.login($scope.login_mail,$scope.login_password));
                 $http(database.login($scope.login_mail,$scope.login_password)).success(function($data){
                     if($data.status==1)
                     {
@@ -84,9 +84,11 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                         $scope.redirect();
                     }
                     else{
-                            navigator.notification.alert(JSON.stringify($data));
-                            navigator.vibrate(500);
-                            $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;
+                            if($data.msg=="Mail ID or Password is Incorrect" && $data.status==0)
+                            {
+                                navigator.vibrate(500);
+                                $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;   
+                            }
                          }
                }).error(function(err){
                    navigator.vibrate(1000);
