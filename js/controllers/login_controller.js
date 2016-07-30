@@ -35,18 +35,18 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                     navigator.notification.alert($data.msg);
                     $scope.submittedsignup=false;
                     $scope.signuploading=false;
-                    navigator.vibrate(2000);
+                    navigator.vibrate(500);
                     $scope.redirect();
                 }
                 else
                 {
-                    navigator.vibrate(2000);
+                    navigator.vibrate(500);
                     navigator.notification.alert($data.msg);
                     $scope.signuploading=false;
                     $scope.submittedsignup=false;
                 }
                }).error(function(err){
-                   navigator.vibrate(2000);
+                   navigator.vibrate(1000);
                    if((err=="") || (err=="undefined")){
                        navigator.notification.alert("Check your Internet Connection!!");
                    }
@@ -68,6 +68,7 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
             $scope.submitted=true;
             if($scope.login_mail){
                 $scope.validateemail=false;
+                navigator.notification.alert(database.login($scope.login_mail,$scope.login_password));
                 $http(database.login($scope.login_mail,$scope.login_password)).success(function($data){
                     if($data.status==1)
                     {
@@ -79,16 +80,16 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                         sessionStorage.userDataObJect=JSON.stringify($scope.userdata);
                         $scope.submitted=false;
                         $scope.loginloading=false;
-                        navigator.vibrate(2000);
+                        navigator.vibrate(500);
                         $scope.redirect();
                     }
                     else{
-                            //navigator.notification.alert($data.msg);
-                            navigator.vibrate(2000);
+                            navigator.notification.alert(JSON.stringify($data));
+                            navigator.vibrate(500);
                             $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;
                          }
                }).error(function(err){
-                   navigator.vibrate(2000);
+                   navigator.vibrate(1000);
                    if((err=="") || (err=="undefined")){
                        
                        navigator.notification.alert("Check your Internet Connection!!");
