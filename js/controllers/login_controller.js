@@ -89,7 +89,6 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                          }
                }).error(function(err){
                    navigator.vibrate(2000);
-                   navigator.notification.alert("Error : " + err);
                    if((err=="") || (err=="undefined")){
                        
                        navigator.notification.alert("Check your Internet Connection!!");
