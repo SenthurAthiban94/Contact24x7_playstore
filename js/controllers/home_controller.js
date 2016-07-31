@@ -70,6 +70,8 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
             $scope.menutwocount=0;
             $scope.searchtext="";
             $scope.retrivedcontacts=$scope.contactsindevice;
+            $scope.$apply();
+            $scope.loadingimage=false;   
             //$scope.refreshcontacts();   
         }
         else{

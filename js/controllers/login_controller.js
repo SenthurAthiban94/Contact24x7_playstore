@@ -40,10 +40,18 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                 }
                 else
                 {
-                    navigator.vibrate(500);
-                    navigator.notification.alert($data.msg);
-                    $scope.signuploading=false;
-                    $scope.submittedsignup=false;
+                    if($data.status==0)
+                    {
+                        navigator.vibrate(500);
+                        navigator.notification.alert($data.msg);
+                        $scope.signuploading=false;
+                        $scope.submittedsignup=false;   
+                    }
+                    else{
+                        navigator.notification.alert("Network Error !!");
+                        $scope.signuploading=false;
+                        $scope.submittedsignup=false;
+                    }
                 }
                }).error(function(err){
                    navigator.vibrate(1000);
@@ -90,7 +98,8 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                                 $scope.validate=true;$scope.submitted=false;$scope.loginloading=false;   
                             }
                             else{
-                                navigator.notification.alert(JSON.stringify($data));
+                                navigator.notification.alert("Network Error !!");
+                                $scope.submitted=false;$scope.loginloading=false;
                             }
                          }
                }).error(function(err){
