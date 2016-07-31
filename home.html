@@ -76,12 +76,17 @@
                         </th>
                     </tr>
                     <tr>
-                        <th style="padding:0px;width:0px;"></th>
-                        <th class="col-sm-12 col-xs-12 col-md-12" style="padding:0px;">
-                            <input type="text" style="width:100%;font-size:15px;font-family:Lucida Sans;padding:2px;" ng-model="searchtext" ng-disabled="loadingimage"
-                            placeholder="Search for Contacts here..."></input>
+                        <th class="col-sm-12 col-xs-12 col-md-12" colspan="3" style="padding:0px;">
+                            <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Top</button>
+                            </div>
+                            <div class="col-sm-8 col-xs-8 col-md-8" style="padding:0px;">
+                                 <input type="text" style="width:100%;font-size:15px;font-family:Lucida Sans;padding:2px;" ng-model="searchtext" ng-disabled="loadingimage" placeholder="Search for Contacts here..."></input>
+                            </div>
+                            <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Down</button>
+                            </div>
                         </th>
-                        <th style="width:0px;padding:0px;"></th>
                     </tr>
                 </thead>
             </table>
@@ -96,12 +101,13 @@
                     </span>
                 </div>
             </div>
-            <div canvas="container" style="padding:0px;padding-bottom:105px;" id="tablecontents" ng-hide="loadingimage">
+            <div canvas="container" style="padding:0px;padding-bottom:{{contentpaddingbottom}};" id="tablecontents" ng-hide="loadingimage">
+                <a id="top"></a>
                 <table class="table table-hover" ng-cloak>
                     <tbody id="result"> 
                         <div class="alert alert-danger" ng-show="(!(retrivedcontacts | filter:searchtext).length) && (!loadingimage)" id="noresults" ng-cloak>No results found !!</div>
-                        <tr ng-repeat="contact in retrivedcontacts | filter:searchtext | orderBy: 'contactName'">
-                            <td class="col-sm-1 col-xs-1 col-md-1" ng-bind="$index+1"></td>
+                        <tr ng-repeat="contact in retrivedcontacts | filter:searchtext | limitTo:totalDisplayed | orderBy: 'contactName' ">
+                            <td class="col-sm-1 col-xs-1 col-md-1" ng-bind="$index+1;"></td>
                             <td class="col-sm-10 col-xs-10 col-md-10" style="font-size:16px;padding-left:8px;padding-right:5px;">
                                 <div>
                                     <div>
@@ -127,8 +133,12 @@
                                 </button>
                             </td>
                         </tr>
+                        <tr ng-if="nomorecontacts" ng-hide="searchtext.length" style="padding:0px;">
+                            <td colspan="3" style="padding:0px;"><div class="well" style="text-align:center;"><button class="btn btn-sm btn-info" ng-click="showmore();" type="button"> Show More </button></div></td>
+                        </tr>
                     </tbody>
                 </table>
+                <a id="bottom"></a>
             </div>
         </div>
 <!--        <iframe ng-if="googlelogout" src="https://accounts.google.com/Logout" style="display:none;"></iframe>-->

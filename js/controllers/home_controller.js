@@ -17,6 +17,9 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
     if(!sessionStorage.userDataObJect){
         $scope.redirect();
     }
+    $scope.contentpaddingbottom="85px";
+    $scope.contactsdisplaycount = 100;
+    $scope.totalDisplayed = $scope.contactsdisplaycount;
     $scope.userdata=JSON.parse(sessionStorage.userDataObJect);
     $scope.menuonecount=0;$scope.menutwocount=0;
     $scope.selectmenuitem=function(itemselected){
@@ -62,16 +65,15 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         $scope.item=3;
         $scope.selectmenuitem($scope.item);
         $scope.checkthirdselected();
-    }
+    };
     $scope.checkfirstselected=function($selectedmenu){
         if($selectedmenu<2)
         {
             $scope.loadingimage=true;
             $scope.menutwocount=0;
-            $scope.searchtext="";
+            $scope.searchtext=""; 
             $scope.retrivedcontacts=$scope.contactsindevice;
-            $scope.$apply();
-            $scope.loadingimage=false;   
+            $scope.loadingimage=false;  
             //$scope.refreshcontacts();   
         }
         else{
@@ -359,6 +361,8 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
 	$scope.refreshcontacts=function(){
         $('#noresults').hide();
         $scope.loadingimage=true;
+        $scope.nomorecontacts=true;
+        $scope.totalDisplayed = $scope.contactsdisplaycount;
         $scope.Checkuploadedcontacts();  
         $scope.retrivedcontacts=[];
         $scope.$apply();
@@ -375,6 +379,14 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         };
 	};
     
+    $scope.showmore=function(){
+        $scope.totalDisplayed += $scope.contactsdisplaycount;
+        if($scope.totalDisplayed >= $scope.retrivedcontacts.length)
+        {
+            $scope.contentpaddingbottom="105px";
+            $scope.nomorecontacts=false;
+        }
+    };
     $scope.actiontobeperformedonallcontacts=function(){
         $scope.loadingimage=true;
         $scope.operationperforming=true;
