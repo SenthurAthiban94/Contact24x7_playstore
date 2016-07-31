@@ -54,7 +54,7 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                     }
                 }
                }).error(function(err){
-                   navigator.vibrate(1000);
+                   navigator.vibrate(500);
                    if((err=="") || (err=="undefined")){
                        navigator.notification.alert("Check your Internet Connection!!");
                    }
@@ -103,7 +103,7 @@ var contact_App=angular.module('Contacts_sync',['contact_services']);
                             }
                          }
                }).error(function(err){
-                   navigator.vibrate(1000);
+                   navigator.vibrate(500);
                    if((err=="") || (err=="undefined")){
                        
                        navigator.notification.alert("Check your Internet Connection!!");
