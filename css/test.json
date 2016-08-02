@@ -1,0 +1,27 @@
+{
+	"installed": {
+		"client_id": "321489143617-4t5duhhnu6q6oeijdnlqseqgef7726ob.apps.googleusercontent.com",
+		"project_id": "contact-24x7-1353",
+		"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+		"token_uri": "https://accounts.google.com/o/oauth2/token",
+		"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+		"redirect_uris": [
+			"urn:ietf:wg:oauth:2.0:oob",
+			"http://localhost"
+		]
+	},
+	"web": {
+		"client_id": "321489143617-9jn1c4a3b26q6mt4319gnv3a0t0ckafp.apps.googleusercontent.com",
+		"project_id": "contact-24x7-1353",
+		"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+		"token_uri": "https://accounts.google.com/o/oauth2/token",
+		"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+		"client_secret": "Njg75ervQ_06ulFtNQWLO0VJ",
+		"redirect_uris": [
+			"http://localhost"
+		],
+		"javascript_origins": [
+			"http://localhost"
+		]
+	}
+}
