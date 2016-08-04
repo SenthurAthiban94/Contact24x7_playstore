@@ -1,95 +1,115 @@
-         ::-webkit-scrollbar {
-                width: 12px;
+ ::-webkit-scrollbar {
+                width: 0px;
             }
 
-            ::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-                border-radius: 10px;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-            }
-            #header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 43px;
-                padding:2%;
-                padding-left: 5px;
-                background-color:#FCAF9E;
-                font-size:20px;
-            }
-            #footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 44px;
-                background-color: #abcdef;
-            }
-            .content {
-                position: fixed;
-                top: 43px;
-                bottom: 44px;
-                left: 0;
-                right: 0;
-                overflow: auto;
-                padding-left:5px;
-                padding-right: 5px;
-                padding-top:5px;
-                padding-bottom:5px;
-            }
-            .content div{
-                padding:0px;
-            }
-            
- /*//////////////////End default style////////////////////////////////////////////*/
- 
-/* /////////////////Chat box style/////////////////////////////////*/
-
-#messagecontent{
-     -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  border: none;
-  padding-top: 7px;
-  padding-top: 7px;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
-  font: normal "Courier New", Courier, monospace;
-  color: rgba(5,0,0,1);
-  text-align: justify;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-/*  background: rgba(242,239,239,0.7);*/
-  -webkit-box-shadow: 3px 3px 2px 0 rgba(0,0,0,0.3) ;
-  box-shadow: 0 3px 2px 0 rgba(0,0,0,0.3);
-  right:0;
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 0px;
 }
- #sender_message_user{
-  background-color:#E9EEEE;   
- }
-#sender_message_messagestyle {
-    background-color:#F8F7F7;
-    padding:5px;
-    word-wrap:break-word;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
- #reciever_message_user
- {
-     background-color:#97DED6;   
- }
- #reciever_message_messagestyle {
-    background-color:#E5FEFB;
-    padding:5px;
-    word-wrap:break-word;
-    overflow-wrap: break-word;
-    white-space: pre-wrap; 
- }
- #sender_img_div{
-     width:40px;
- }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+/*////////////////////Angular Loading Fixed ng-cloak//////////////////////////////////*/
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important
+}
+/*////////////////////Angular Loading Fixed with ng-cloak //////////////////////////////////*/
+html{
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;  
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+body{
+ background-color: #FFFFFF; 
+}
+.menu {
+  /*this is the nav*/
+  background: #3c3933;
+  width: 240px;
+  height: 100%;
+  top: 0;
+  position: fixed;
+  left: -240px;
+}
+.menu a {
+  display: block;
+  /* drops the nav vertically*/
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 14px;
+}
+.push-left {
+  left: 0;
+}
+.bodypush {
+  overflow-x: hidden;
+  position: relative;
+  left: 0;
+}
+.pushmenu-push-toright {
+  left: 240px;
+}
+/*Transition*/
+
+.menu,
+.bodypush {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+
+.headerhome {
+            position: fixed;
+            margin:0 auto;
+            width:100%;
+       }
+#headertable {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    padding:0px;    
+    font-size:17px;
+    background-color:white;
+}
+#tablebody{
+    margin-top:125px;
+    left: 0;
+    right: 0;
+    padding:0px;
+}
+#loader {
+    position:fixed;
+    top: 50%;
+    left: 38%;
+    width:80px;
+    height:80px;
+    opacity: 0.7;
+    text-align:center;
+}
+#loaderbackground
+{
+    position:fixed;
+    top: 126px;
+    left: 0;
+    bottom:0;
+    width:100%;
+    height:100%;
+    background-color:#FFFFFF;
+     /*rgba(249, 249,249, 0.4);*/
+}
+.icon-bar{
+    background-color:white;
+}
+.navbar-toggle{
+    background-color:black;
+}

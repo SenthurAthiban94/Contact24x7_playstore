@@ -1,127 +1,149 @@
-<html ng-app="Horoscope_Predictor">
+<html>
     <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src * 'unsafe-inline'; media-src *">
         <meta name="format-detection" content="telephone=no">
-<!--        <meta name="msapplication-tap-highlight" content="no" />-->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script type="text/javascript" src="lib/js/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="lib/js/angular.js"></script>
-        <script type="text/javascript" src="lib/js/ui-bootstrap-tpls-0.11.0.js"></script>
-        <script src="js/horoscope.js"></script>
-        <title>Horoscope Predictor</title>
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1,height=device-height, target-densitydpi=medium-dpi,width=device-width">
+        <title>Contact Backup</title>
+        <link rel="stylesheet" href="lib/css/slidebars.css">
+        <link rel="stylesheet" href="lib/css/style.css">
+        <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="lib/css/jansy-bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/index.css"></link>
+        <script type="text/javascript" src="lib/js/angular.min.js"></script>
+        <script type="text/javascript" src="./lib/js/googleclient.js"></script>
+        <script type="text/javascript" src="lib/js/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/js/jasny-bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/controllers/home_controller.js"></script>
+        <script type="text/javascript" src="js/services/api_controller.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
     </head>
     
-    <body ng-controller="horoscopecontroller">
-        <div id="header" ng-init="contents=false;" class="col-md-12 col-sm-12 col-xs-12" id="header" style="padding:0px;">
-            <div class="col-md-10 col-sm-10 col-xs-10" style="padding:0px;padding-left:3px;padding-top:5px;">
-                <strong><b>Horoscope Predictor</b></strong>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-2" style="padding:0px;padding-top:5px;">
-                <button ng-if="contents" type="button" ng-click="change();content=0;" class="btn btn-success btn-sm"> Back </button>
+    <body ng-controller="home_controller" ng-init="displaynames=devicecontactsnames;refreshcontacts();">
+        <nav id="Menus" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation" style="width:70%;background-color:#1B2A4B;"
+        ng-init="selecteditem1='active';">
+            <img src="img/logo.png" height="50px" width="100%;"></img>
+            <ul class="nav nav-pills nav-stacked" id="menulist">
+                <li class="{{selecteditem1}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);menuonecount=menuonecount+1;checkfirstselected(menuonecount);"><b>Device Contacts</b></a>
+                </li>
+                <li class="{{selecteditem2}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=uploadedcontactsnames;googlecontactmenu=false;tablemargin=125;item=2;selectmenuitem(item);menutwocount=menutwocount+1;checksecondselected(menutwocount);"><b>Uploaded Contacts</b></a>
+                </li>
+                <li class="{{selecteditem3}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=Googlecontactsnames;googlecontactmenu=true;tablemargin=122;item=3;selectmenuitem(item);checkthirdselected();"><b>Google Contacts</b></a>
+                </li>
+                <li class="{{selecteditem4}}">
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);logoutsession();disconnectUser();" ng-dblclick="false"><b>Logout</b></a>
+                </li>
+            </ul>
+        </nav>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div style="padding:0px;padding-left:10px;">
+                <button type="button" class="navbar-toggle pull-left" style="margin-right:0px;" data-toggle="offcanvas" data-target="#Menus"
+                data-canvas="body">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div style="padding-top:10px;padding-bottom:10px;padding-right:5px;">
+                    <span style="color:white;font-size:20px;padding-left:5px;" ng-bind="displaynames.title">Device Contacts</span>
+                    <button ng-if="!googlecontactmenu" type="button" ng-bind="displaynames.selectall" class="btn btn-primary btn-sm pull-right"
+                    ng-click="actiontobeperformedonallcontacts();" ng-disabled="checkbackgroundopertion(operationperforming,retrivedcontacts.length)" ng-cloak>Upload All</button>
+                    <input ng-if="googlecontactmenu && gotgooglecontacts.Contacts" type="button" class="btn btn-sm pull-right btn-success" style="padding-left:4px;padding-right:4px;" ng-click="switchaccount();" value="Switch Account" ng-cloak></input>
+                </div>
             </div>
         </div>
-        <section  ng-show="!contents" class="col-md-12 col-sm-12 col-xs-12 content" style="padding:0px;background-color:#c2d6d6;height:100%;">
-            <div class="col-md-12 col-sm-12 col-xs-12" style="height:23%;padding:0px;padding-top:5px;padding-bottom:5px;">
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                     <a href="" ng-click="contents=true;content=1;"><img src="img/47043.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                    <a href="" ng-click="contents=true;content=2;"><img src="img/47047.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:15px;">
-                    <a href="" ng-click="contents=true;content=3;"><img src="img/47073.png" style="height:80px;width:80px;"></img></a>
+        <div style="padding:0px;">
+            <table class="table table-hover" id="headertable">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1 col-xs-1 col-md-1" style="padding-left:5px;padding-right:5px;">
+                            <strong>No.</strong>
+                        </th>
+                        <th class="col-sm-10 col-xs-10 col-md-10" style="text-align:center;">
+                            <span style="font-size:14px;" ng-if="displaynames==Googlecontactsnames" ng-bind="gotgooglecontacts.title"></span>
+                            <strong ng-if="(displaynames!=Googlecontactsnames) || (!gotgooglecontacts.title)">Contacts</strong>
+                        </th>
+                        <th class="col-sm-1 col-xs-1 col-md-1" style="padding-top:4px;padding-bottom:4px;padding-right:5px;">
+                            <button ng-if="!googlecontactmenu" type="button" ng-click="loadingimage=true;refreshcontacts();searchtext='';" class="btn btn-sm btn-success"
+                            style="height:35px;padding-left:7px;padding-right:7px;">
+                                <b>
+                                    <span ng-bind="displaynames.refresh">Refresh</span>
+                                </b>
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-12 col-xs-12 col-md-12" colspan="3" style="padding:0px;">
+                            <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Top</button>
+                            </div>
+                            <div class="col-sm-8 col-xs-8 col-md-8" style="padding:0px;">
+                                 <input type="text" style="width:100%;font-size:15px;font-family:Lucida Sans;padding:2px;" ng-model="searchtext" ng-disabled="loadingimage" placeholder="Search for Contacts here..."></input>
+                            </div>
+                            <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Down</button>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="tablebody" ng-init="name='Name :';number='Number :';" style="margin-top:{{tablemargin}}px;">
+            <div id="loaderbackground">
+                <div id="loader">
+                    <img src="css/loading/loader.gif" height="100%" width="100%"></img>
+                    <br>
+                    <span style="background-color:white;opacity:1;">
+                        <b>Loading...</b>
+                    </span>
                 </div>
             </div>
-            <div class="col-md-12 col-sm-12 col-xs-12" style="height:23%;padding:0px;padding-top:5px;padding-bottom:5px;">
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                     <a href="" ng-click="contents=true;content=4;"><img src="img/47074.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                    <a href="" ng-click="contents=true;content=5;"><img src="img/47121.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:15px;">
-                    <a href="" ng-click="contents=true;content=6;"><img src="img/47140.png" style="height:80px;width:80px;"></img></a>
-                </div>
+            <div canvas="container" style="padding:0px;padding-bottom:{{contentpaddingbottom}};" id="tablecontents" ng-hide="loadingimage">
+                <a id="top"></a>
+                <table class="table table-hover" ng-cloak>
+                    <tbody id="result"> 
+                        <div class="alert alert-danger" ng-show="(!(retrivedcontacts | filter:searchtext).length) && (!loadingimage)" id="noresults" ng-cloak>No results found !!</div>
+                        <tr ng-repeat="contact in retrivedcontacts | filter:searchtext | limitTo:totalDisplayed | orderBy: 'contactName' ">
+                            <td class="col-sm-1 col-xs-1 col-md-1" ng-bind="$index+1;"></td>
+                            <td class="col-sm-10 col-xs-10 col-md-10" style="font-size:16px;padding-left:8px;padding-right:5px;">
+                                <div>
+                                    <div>
+                                        <b>
+                                            <span ng-bind="name"></span>
+                                        </b>
+                                        <span style="padding-left:2px;word-wrap:break-word;overflow-wrap: break-word;white-space: pre-wrap;" ng-bind="contact.contactName"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <b>
+                                            <span ng-bind="number"></span>
+                                        </b>
+                                        <span style="padding-left:2px;word-wrap:break-word;overflow-wrap: break-word;white-space: pre-wrap;" ng-bind="contact.contactNo | removeSpaces"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-xs-1 col-md-1" style="padding-left:0px;padding-right:5px;padding-top:10px;padding-bottom:10px;">
+                                <button ng-if="!googlecontactmenu" type="button" ng-click="actiontobeperformedonthiscontact(contact);" ng-disabled="doesExist(contact);"
+                                class="btn btn-sm {{displaynames.style}}" style="height:35px;padding-top:2px;padding-bottom:2px;" ng-bind="displaynames.select">
+                                Upload
+                                </button>
+                            </td>
+                        </tr>
+                        <tr ng-if="nomorecontacts" ng-hide="searchtext.length" style="padding:0px;">
+                            <td colspan="3" style="padding:0px;"><div class="well" style="text-align:center;"><button class="btn btn-sm btn-info" ng-click="showmore();" type="button"> Show More </button></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a id="bottom"></a>
             </div>
-            <div class="col-md-12 col-sm-12 col-xs-12" style="height:23%;padding:0px;padding-top:5px;padding-bottom:5px;">
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                     <a href="" ng-click="contents=true;content=7;"><img src="img/47210.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                    <a href="" ng-click="contents=true;content=8;"><img src="img/47213.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:15px;">
-                    <a href="" ng-click="contents=true;content=9;"><img src="img/47214.png" style="height:80px;width:80px;"></img></a>
-                </div>
-            </div>
-            <div class="col-md-12 col-sm-12 col-xs-12" style="height:23%;padding:0px;padding-top:5px;padding-bottom:5px;">
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                     <a href="" ng-click="contents=true;content=10;"><img src="img/47293.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:10px;">
-                    <a href="" ng-click="contents=true;content=11;"><img src="img/47382.png" style="height:80px;width:80px;"></img></a>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:2px;padding-left:15px;">
-                    <a href="" ng-click="contents=true;content=12;"><img src="img/47405.png" style="height:80px;width:80px;"></img></a>
-                </div>
-            </div>
-        </section>
-        <section ng-show="contents" class="col-md-12 col-sm-12 col-xs-12 content" style="padding:0px;padding-left:5px;padding-bottom:50px;padding-top:10px;background-color:#c2d6d6;height:100%;">
-            <span ng-if="content==1">
-               <p>They are prudent, thoughtfulness, reasoning, and love of power, self - reliant and highly intellectual. They are responsible, patient and ambitious. They are very focused for the accomplishment of their tasks. They always keep their goal in their minds. They are clever and very practical. They know it very well that how to get their jobs done by pleasing people. They can be highly selfish and self centered. Not optimistic in any matter till succeeds. Works on facts and statistics and makes use of them in worldly affairs. Honest, sincere and economic.</p>
-<p>While cannot be intimidated by force, they melt like wax in the warmth of friendship and goodness. They have special organizing ability. Even in adverse circumstances they rarely ask for help. They have an impediment in speech. Fit for public work and position of prominence. Best suited for jobs in finance department or in technical field. Cannot cultivate friendship easily with strangers but is social with earlier friends. Not fit for romance but provides all comforts to family and loved ones. Protects family like a hen. Very slow and cautious in dealing with opposite sex, has sexual relations with females older than himself.</p>
-            </span>
-            <span ng-if="content==2">
-               <p>They are diplomatic, graceful, peaceful, idealistic, hospitable, gentle, compassionate, courteous and honest. Librans have a tendency to maintain balance in everything they undertake. They are affectionate and avoid getting into an argument. They are known for their beautiful smile, cheerful disposition and romantic temperament. They can be successful artists, business persons and politicians because of their balanced approach. Famous for judgement, weighs pros and cons thoroughly before coming to a conclusion. Covets the prosperity of others but never fails to help dependents. Upright and sympathetic but flexible and sensitive. Anger is soon pacified.</p><p>
-Thinks of others more than self and can argue with clarity and foresight. Always for justice, harmony, love and peace at any cost. Being an airy sign, they are ardent lovers of nature and its beauties. Changes abode to undertake frequent travels and loves high standard of living. Takes interest in their dress, furniture, conveyance, and other comforts. Have another name in the name of god / goddess. Expert traders,usually popular, makes a good business partner. Wins goodwill and popularity in public. Make good salesman, liaison officers, and receptionists. Lover of art and female society. Loved by fortunate females.
-               </p>
-            </span>
-            <span ng-if="content==3">
-                <p>Taureans are attractive, magnetic, affectionate, romantic, large hearted, tolerant, patient and hard working. They are dependable, persistent, loyal, patient and generous. They have very pleasing personality. Self respecting they detest any binding. But they have cool and collected temperament. They have sweet voice with a very captivating personality to cast their influence over others. They enjoy much mental contentment.They have medium stature but an enchanting personality. Known for their erudition they have much knowledge in science and arts. In music also they will have much knowledge and ability.</p>
-               <p>They are magnanimous by nature and help liberally the needy and poor by offering large donation. These people can’t be misled by emotional vein. Taureans are practical persons and not day dreamers. They are active and quite outspoken. If they actively participate in political field they may get good amounts of success as well. Generally the Taurus people love business and hence they shine well in this field. They are fond of good clothing’s and love to present them in an impressive style. They also love good food and sweet delicacies. They are obstinate but have good aesthetic sense and can become successful artists. They rarely loose their temper but once they loose it their temper can be as dangerous and as violent as an earthquake. They are very hard working and get tired rarely.
-               </p>
-            </span>
-            <span ng-if="content==4">
-                <p>Aries is the first sign of zodiac that is why Arien has been termed as child of zodiac. Arien’s are innocent, clean hearted, energetic and aggressive. They are independent, generous, optimistic, enthusiastic andcourageous. They are sensuous and emotional. They have a tendency to increase their personal, social and political influence. They are talkative and can talk about anything and nothing. They like conversations about intellectual topics and engage themselves in lively discussionsor friendly debates. They have natural artistic talent in them. They loose their temper very quickly but get pacified also easily. Despite being of fiery temperament they rarely start any fight. But once it has begun they can go to any limit to eliminate their enemies.
-</p><p>They don’t like to think much rather believe in coming into action actively. They are bold and controversial persons in society. They are born leaders and great followers and are popular in society and state. They are generally sparkling, happy, bubbling over with zest and high spirits. Hard core Arien’s are straightforward and are not diplomatic at all. They are successful in those professions where courage, vigor and strength are needed like police, military or sports. A hard core Arien is popularly known as a Casanova because of his several amorous adventures. Their romances are sudden, of the highest passion, rising to the highest crescendo like a rocket but immediately of short duration. They have highest organizing capacities. An Arienman is a complete man and can be highly compatible to a woman in love but one can not take his advantage because his temper can get converted into a fury and after that he shall never look back.</p>
-            </span>
-            <span ng-if="content==5">
-                <p>They are analytical, observant, helpful, reliable, precise, ingenious and very intelligent. They have management skills in them. They are very successful in competitive examinations like IAS etc. In addition to that they are good mangers and very disciplined in their approach towards life and profession. They are highly organized and are known for their communication skills and intelligence but they are quite shy by nature.Too critical of other people’s faults and feelings.</p>
-           <p>Good linguist and have scientific turn of mind for learning anything and everything. Discriminating and emotional to get easily carried away by impulse. Nervous, lacking of self-confidence, methodical, ability to present an idea in great details. They are cautious regarding their own interests, prudent, economical, diplomatic and shrewd. Remarkable for house keeping. Mathematician, physician or interest in occult subjects. Being an earthy sign they take pleasure in gardening and agriculture,fond of accumulating wealth. Peaceful and pleasant domestic life, have limited number of children. Good income, success in profession, owner of property. Delay in marriage</p>
-            </span>
-            <span ng-if="content==6">
-                <p>Those people whose zodiac sign is Gemini are energetic, clever, witty and adaptable with good communication skills but they are poor in terms of making decisions. Bold with keen understanding of human nature, humane and sympathetic. Remarkable for ingenuity, originality and intellectual ability, capable of grasping situations on spur of moment. Liable to lose from fraud and deception, get providential help,unusual power of adaptability. Variable temperament, restlessness, impatience. Gain competence in all mental pursuits. Lack in determination, quick decision and concentration.</p>
-           <p>They have natural inclination towards learning and education. They are good in mathematics and statistics. Tend to become experts in mechanical sciences. Business like attitude and have wealth of information in every matter. Many brilliant conversationists, poets, orators, writers, musicians, are born in this sign. They are successful in professions like financial management, accounts, teaching and banking industry. They can become very successful chartered accountants. Follow two occupations. Can take up new assignments and be successful in them. Suffer continuous misfortune in service. Gets honor in society. Obstacles and losses through females. They must be cautious in moving with opposite sex. Interested in philosophy and religion. Weakness for women and adept in winning their affection. Always welcome to any social gathering. Marriage is full of interest and excitement for them.</p>
-            </span>
-            <span ng-if="content==7">
-                <p>They are dependable, loyal, adaptable, caring and responsive. They are hypersensitive and hyperemotional. They are sensible. They become very happy when they get some kind of happiness and get deeply sad too in case of intervention of any disappointment and frustration. They have powerful imagination and are highly intuitive. They can visualize future events with the help of their powerful imagination and intuition. Famous for fertile imagination and ability to imitate others with ease. Many famous mimics and actors are born under this sign. Receptive to new ideas and adapt themselves to new environment.</p>
-               <p>Accumulate wealth through hard work. Can take up occupation of fluctuating nature. Best suited to commercial career, especially to the trade of catering. Good writers, orators, leaders in society, advisors. Cancerians can become very successful politicians. Short tempered and impatient. Changeable and fluctuating making the person moody. Not to be relied upon. Very talkative, self reliant, honest and unbending. Have reputation for love of justice and fair play. Excellent memory and famous for their true hospitality. Gain favour of intelligent people, independent temperament. Deeply attached to family and children. Ideal life partners. Often prey to women. Lead wandering and restless life.
-               </p>
-            </span>
-            <span ng-if="content==8">
-                <p>They are highly attractive, active, knowledgeable, generous, straightforward and dynamic but tactless. The speed of their emotions is very high and sometimes it becomes little difficult for Sagittarians to control their emotions. They are deeply religious and are pandits of religion and politics. They can become successful evangelists, professor and educationists. Free, generous, honest, reliable, god-fearing. Alert, intuitive and burrows to the point easily. Short sighted or hunchbacked. Straight forward in dealings and has high sense of justice.</p>
-           <p>oo conventional and business like. Sometimes restless and overanxious. Dual temperament. Versatile desirous to know something of everything. Disposition is happy and cheerful. Adaptable, content with simple life. Lover of art and poetry has creative ability. Respecter of law rarely gets involved in legal affairs. Desire for learning philosophy and occult subjects. Exercises strict control over food, drinks and relation with opposite sex. Neatness, orderliness, being methodical, and diligence contribute towards success. Has self-confidence. Never leaves off the work on hand unfinished. Gets favour from Government, inherits property. Successful as a teacher, public speaker, heads of religious institution, judge, advocate etc.</p>
-            </span>
-            <span ng-if="content==9">
-                <p>They are loyal, passionate, resourceful, observant, dynamic, frank, fearless and brusque. Fertile mind, intelligent, will power. Words are well chosen. Do not interfere in others’ matters. Notorious for many outstanding characteristics. They are secretive, diplomatic, hospitable, caring and at times revengeful also. Like an Arien they do not keep a naked sword with them rather they are mental warriors. They can be highly successful in politics because of their diplomatic tendencies. They are extremists in the matters of love and enmity. They are very complex and it is little difficult to understand them.</p>
-               <p>They are arrogant and self centered too. It is a sign of dictators, energy inexhaustible. Can never display a superficial knowledge till he thinks he is thorough. Enormous confidence in executive ability. Good conversationists as well as writers and rely too much on their own intelligence. Reputation for secret crimes. Earn wealth through hard work and courage, self-made. Take part in public movements, advisor / leader in society, successful in defence or police service, have number of enemies. Makes excellent research worker on original and novel lines. Can do better if left alone to work. Fond of outdoor sports. Can become proficient in music, art, dance, etc. Immense ability for occultism. Immense appetite for sex and treat partner like a beast.</p>
-            </span>
-            <span ng-if="content==10">
-                <p> Confident, ambitious, loyal, encouraging, expressive, forceful, dominant and born to rule and are frank, generous, magnanimous and ambitious in nature. They have firm will and forgiving spirit, are voracious readers. Fond of pleasure and luxury, even with limited resources. Capable of inspiring confidence. Jealous of own fame and unlikely to become a victim of flattery. They have king sized ego. Very quickly they shall loose their temper and very quickly they shall retrieve it back. They forget and forgive quickly. They are good in establishing and running organizations. They always want to do something big and small things do not appeal to them. They have greatness thrust upon themselves.
-</p><p>
-They are very fond of listening self praise. They have a tendency to protect their self respect. Leo people don’t like to speak much. They are highly successful in administration. The main characteristics are the habit of silence. Journey of eastern direction or working while sitting towards east direction is very helpful. Self-confidence and self-possession are secrets of their success. They have endurance and confidence to make through any difficult task. Make use of every opportunity that arises. Interested in drama, poetry and fine arts. Loyalty for either king or own family is supreme. Potential speculator or punter. Successful in government job, army or police. Gets specialization in one field. Charm, attracts opposite sex, ideal lover. Very sexy, fond of non-vegetarian food, fond of wandering in distant places, mountain, hills etc, afraid of cold.</p>
-            </span>
-            <span ng-if="content==11">
-                <p>They are witty, clever, humanitarian, inventive, original, obstinate, intelligent, and reliable and have certain fixed principles in their life. They have healthy outlook on life and its problems. Interested in all progressive things, reserved, weighs everything before executes or watches and waits till others execute. Caution, patience, concentration, studiousness never leave him. Their conversation is always interesting, straightforward temperament, admired by all. Kind, fond of learning and inspires noble thoughts. Love of nature, kind disposition.</p>
-<p>
-Consistent in friendship, strong in likes and dislikes. Love for solitude. They develop intuition and inspiration. Interested in deep meditation and concentration. retentive memory, research on scientific lines. Works for the common and the down trodden. Earn money through modern machineries, investments and discoveries, interested in technical education. Fondness for home. Preferences for equally intelligent and educated partner irrespective of age. Home well furnished having collection of antiques managed in modern fashion. Do not give expression to their love. If lovers are passionate, they will not be satisfied as Aquarian’s may appear to be cold. Prosperity from the ages of 22 to 40.</p>
-            </span>
-            <span ng-if="content==12">
-                <p>They are imaginative, compassionate, adaptable, accepting and devoted. Not an impressive figure. They are restless, imaginative and romantic Upright, honest and humane with changeable temper and swayed by opinion of others. They lack self - confidence.Extremely sympathetic, forgiving, generous, honest and reliable. Understands own abilities and this quality stands as an impediment in progress. Orthodox, extremely superstitious, reserved, God fearing, rigid in observation of religious customs and practices.
-</p><p>They cannot see sufferings even in animals and renders assistance. Lacks ambition and finds difficult to make speedy progress in material zone. Pisceans prefer to stay in the world of their imagination. They are highly intuitive and remain in their own world of mysteries and imagination. They are highly emotional, honest,generous and good people.</p>
-            </span>
-        </section>
+        </div>
+<!--        <iframe ng-if="googlelogout" src="https://accounts.google.com/Logout" style="display:none;"></iframe>-->
+        <script src="js/slidebars.js"></script>
+        <script src="js/scripts.js"></script>
     </body>
 
 </html>
