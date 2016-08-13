@@ -19,23 +19,22 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </head>
-    
     <body ng-controller="home_controller" ng-init="displaynames=devicecontactsnames;refreshcontacts();">
         <nav id="Menus" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation" style="width:70%;background-color:#1B2A4B;"
         ng-init="selecteditem1='active';">
             <img src="img/logo.png" height="50px" width="100%;"></img>
             <ul class="nav nav-pills nav-stacked" id="menulist">
                 <li class="{{selecteditem1}}">
-                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);menuonecount=menuonecount+1;checkfirstselected(menuonecount);"><b>Device Contacts</b></a>
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);menuonecount=menuonecount+1;checkfirstselected(menuonecount);movetop();"><b>Device Contacts</b></a>
                 </li>
                 <li class="{{selecteditem2}}">
-                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=uploadedcontactsnames;googlecontactmenu=false;tablemargin=125;item=2;selectmenuitem(item);menutwocount=menutwocount+1;checksecondselected(menutwocount);"><b>Uploaded Contacts</b></a>
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=uploadedcontactsnames;googlecontactmenu=false;tablemargin=125;item=2;selectmenuitem(item);menutwocount=menutwocount+1;checksecondselected(menutwocount);movetop();"><b>Uploaded Contacts</b></a>
                 </li>
                 <li class="{{selecteditem3}}">
-                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=Googlecontactsnames;googlecontactmenu=true;tablemargin=122;item=3;selectmenuitem(item);checkthirdselected();"><b>Google Contacts</b></a>
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="retrivedcontacts='';displaynames=Googlecontactsnames;googlecontactmenu=true;tablemargin=122;item=3;selectmenuitem(item);checkthirdselected();movetop();"><b>Google Contacts</b></a>
                 </li>
                 <li class="{{selecteditem4}}">
-                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);logoutsession();disconnectUser();" ng-dblclick="false"><b>Logout</b></a>
+                    <a href="" data-toggle="offcanvas" data-target="#Menus" ng-click="displaynames=devicecontactsnames;googlecontactmenu=false;tablemargin=125;item=1;selectmenuitem(item);logoutsession();disconnectUser();movetop();" ng-dblclick="false"><b>Logout</b></a>
                 </li>
             </ul>
         </nav>
@@ -56,7 +55,7 @@
             </div>
         </div>
         <div style="padding:0px;">
-            <table class="table table-hover" id="headertable">
+            <table class="table table-hover" id="headertable" class="navbar navbar-fixed-top">
                 <thead>
                     <tr>
                         <th class="col-sm-1 col-xs-1 col-md-1" style="padding-left:5px;padding-right:5px;">
@@ -67,7 +66,7 @@
                             <strong ng-if="(displaynames!=Googlecontactsnames) || (!gotgooglecontacts.title)">Contacts</strong>
                         </th>
                         <th class="col-sm-1 col-xs-1 col-md-1" style="padding-top:4px;padding-bottom:4px;padding-right:5px;">
-                            <button ng-if="!googlecontactmenu" type="button" ng-click="loadingimage=true;refreshcontacts();searchtext='';" class="btn btn-sm btn-success"
+                            <button ng-if="!googlecontactmenu" type="button" ng-click="movetop();loadingimage=true;refreshcontacts();searchtext='';" class="btn btn-sm btn-success"
                             style="height:35px;padding-left:7px;padding-right:7px;">
                                 <b>
                                     <span ng-bind="displaynames.refresh">Refresh</span>
@@ -78,13 +77,13 @@
                     <tr>
                         <th class="col-sm-12 col-xs-12 col-md-12" colspan="3" style="padding:0px;">
                             <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
-                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Top</button>
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;" ng-click="movetop();">Top</button>
                             </div>
                             <div class="col-sm-8 col-xs-8 col-md-8" style="padding:0px;">
                                  <input type="text" style="width:100%;font-size:15px;font-family:Lucida Sans;padding:2px;" ng-model="searchtext" ng-disabled="loadingimage" placeholder="Search for Contacts here..."></input>
                             </div>
                             <div class="col-sm-2 col-xs-2 col-md-2" style="padding:0px;">
-                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;">Down</button>
+                                <button type="button" class="btn btn-sm btn-default" style="padding:0px;font-size:18px;height:100%;width:100%;" ng-click="movebottom();">Down</button>
                             </div>
                         </th>
                     </tr>
@@ -102,11 +101,10 @@
                 </div>
             </div>
             <div canvas="container" style="padding:0px;padding-bottom:{{contentpaddingbottom}};" id="tablecontents" ng-hide="loadingimage">
-                <a id="top"></a>
                 <table class="table table-hover" ng-cloak>
                     <tbody id="result"> 
                         <div class="alert alert-danger" ng-show="(!(retrivedcontacts | filter:searchtext).length) && (!loadingimage)" id="noresults" ng-cloak>No results found !!</div>
-                        <tr ng-repeat="contact in retrivedcontacts | filter:searchtext | limitTo:totalDisplayed | orderBy: 'contactName' ">
+                        <tr id="contactelementid{{$index}}" ng-repeat="contact in retrivedcontacts | filter:searchtext | limitTo:totalDisplayed | orderBy: 'contactName' ">
                             <td class="col-sm-1 col-xs-1 col-md-1" ng-bind="$index+1;"></td>
                             <td class="col-sm-10 col-xs-10 col-md-10" style="font-size:16px;padding-left:8px;padding-right:5px;">
                                 <div>
@@ -133,7 +131,7 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr ng-if="nomorecontacts" ng-hide="searchtext.length" style="padding:0px;">
+                        <tr ng-if="nomorecontacts && retrivedcontacts.length" ng-hide="searchtext.length" style="padding:0px;">
                             <td colspan="3" style="padding:0px;"><div class="well" style="text-align:center;"><button class="btn btn-sm btn-info" ng-click="showmore();" type="button"> Show More </button></div></td>
                         </tr>
                     </tbody>
@@ -142,6 +140,8 @@
             </div>
         </div>
 <!--        <iframe ng-if="googlelogout" src="https://accounts.google.com/Logout" style="display:none;"></iframe>-->
+        <script>
+        </script>
         <script src="js/slidebars.js"></script>
         <script src="js/scripts.js"></script>
     </body>

@@ -28,6 +28,12 @@ contactshome.controller('home_controller',['$scope','$http','$window','database'
         else if(itemselected==3){$scope.selecteditem1='';$scope.selecteditem2='';$scope.selecteditem3='active';$scope.selecteditem4='';}
         else{$scope.selecteditem1='';$scope.selecteditem2='';$scope.selecteditem3='';$scope.selecteditem4='active';}  
     };
+    $scope.movetop=function(){
+        $("#tablecontents").scrollTop($('#contactelementid0').position().top + $('#contactelementid0').height() - $("#tablecontents").height());
+    };
+    $scope.movebottom=function(){
+        $("#tablecontents").scrollTop($("#tablecontents")[0].scrollHeight);
+    };
     $scope.displaynames={}; 
     $scope.devicecontactsnames={
         "title" :"Device Contacts",
