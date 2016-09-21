@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html ng-app="Contacts_sync">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign-Up/Login Form</title>
+<!--    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src * 'unsafe-inline'; media-src *">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1,height=device-height, target-densitydpi=medium-dpi,width=device-width">
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script type="text/javascript" src="./lib/js/angular.min.js"></script>
+    <script type="text/javascript" src="./js/controllers/login_controller.js"></script>
+    <script type="text/javascript" src="./js/services/api_controller.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="./lib/js/mobileaccessibility.js"></script>
+    <script type="text/javascript" src="./js/index.js"></script>
+  </head>
+  <body ng-controller="Contacts_sync_controller">
+    <div class="form" id="main" style="padding-bottom:20px;">
+        <div class="tab-content">
+            <h1 style="margin-bottom:20px;"><img src="img/logo.png" height="50px" width="100%;"></img></h1>
+        </div>
+        <ul class="tab-group" style="margin-bottom:5px;">
+            <li class="tab"><a ng-click="validate=false;" href="#signup">Sign Up</a></li>
+            <li class="tab active"><a  ng-click="validate=false;" href="#login">Log In</a></li>
+        </ul>
+        <div class="tab-content">
+        <div id="signup">   
+            <h1 style="margin-top:20px;margin-bottom:30px;">Sign Up</h1>
+            <div class="alert alert-danger" ng-if="validate && ((!username)||(!signup_password)||(!phonumber)||(!signup_email))">
+              <strong>
+                <p ng-if="!username">Invalid Name!!<br>(Only Characters)</p>
+                <p ng-if="!signup_password">Password is Invalid</p>
+                <p ng-if="!phonumber">Phone Number is Invalid</p>
+                <p ng-if="!signup_email">Email is Invalid</p>
+              </strong>
+            </div>
+            <form ng-submit="signup();">
+              <div class="field-wrap">
+                <label>
+                  Name<span class="req">*</span>
+                </label>
+                <input type="text" ng-pattern="/^[a-zA-Z ]*$/" ng-model="username" name="username" required autocomplete="off" ng-disabled="signuploading"/>
+              </div>
+              <div class="field-wrap">
+                <label>
+                  Set A Password<span class="req">*</span>
+                </label>
+                <input type="password" ng-model="signup_password" name="assword" required autocomplete="off" ng-disabled="signuploading"/>
+              </div>
+              <div class="field-wrap">
+                <label>
+                  Phone Number<span class="req">*</span>
+                </label>
+                  <input type="tel" pattern="[7-9]{1}[0-9]{9}" name="phonenumber" maxlength="10" minlength="10" title="Phone Number is Invalid" ng-model="phonumber"  required autocomplete="off"/ ng-disabled="signuploading">
+              </div>
+              <div class="field-wrap">
+                <label>
+                  Email Address<span class="req">*</span>
+                </label>
+                <input type="email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' name="email" ng-model="signup_email" required autocomplete="off" ng-disabled="signuploading"/>
+              </div>
+              <button type="submit" ng-disabled="submittedsignup" ng-dblclick="false;" class="button button-block"/>
+              <span style="padding:0px;"><img ng-show="signuploading" src="css/loading/login_loader.gif" height="35px" width="35px"><span style="padding-top:5px;">Get Started</span></img></span></button>
+              </button>
+              </form>
+        </div>
+        <div id="login">   
+          <h1 style="margin-top:20px;margin-bottom:30px;">Welcome Back!</h1>
+          <div class="alert alert-danger" ng-if="validateemail">
+            <strong>
+              <p if="!login_mail">Email ID is Invalid</p>
+            </strong>
+          </div>
+          <div class="alert alert-danger" ng-if="validate" style="padding-left:5px;padding-right:5px;">
+            <strong>
+              <p if="validate">Email ID or Password is Incorrect</p>
+            </strong>
+          </div>
+          <form ng-submit="login();">
+              <div class="field-wrap">
+              <label>
+                Email Address<span class="req">*</span>
+              </label>
+              <input type="email"  ng-model="login_mail" required autocomplete="off" ng-change="validate=false;validateemail=false;" ng-disabled="loginloading"/>
+              </div>
+              <div class="field-wrap">
+                <label>
+                  Password<span class="req">*</span>
+                </label>
+                <input type="password"  ng-model="login_password" required autocomplete="off" ng-change="validate=false;validateemail=false;" ng-disabled="loginloading"/>
+              </div>
+<!--              <p class="forgot"><a href="#">Forgot Password?</a></p>-->
+              <button type="submit" ng-disabled="submitted" class="button button-block"/>
+              <span style="padding:0px;"><img ng-show="loginloading" src="css/loading/login_loader.gif" height="35px" width="35px"><span style="padding-top:5px;">Log In</span></img></span></button>
+              </form>
+            </div>
+          </div><!-- tab-content -->
+        </div>
+        <script src='./lib/js/jquery.min.js'></script>
+        <script src="./js/form.js"></script>
+  </body>
+</html>
